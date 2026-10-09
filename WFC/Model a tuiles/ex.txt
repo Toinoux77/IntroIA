@@ -1,0 +1,92 @@
+██████████████
+══ ╗ ██══ ╗ ██
+██ ║ ████ ║ ██
+
+██ ║ ████ ║ █
+██ ║ ██══ ╝ █
+██ ║ ████████
+
+       ███████
+  (0)  ░░ ░ ░░
+       ~~ ~ ~~
+██ ║ ██~~ ~ ~~
+██ ╚ ══░░ ⚓░░
+███████░░ ║ ░░
+
+Il y a des probleme de tuiles qui ne sont pas bien associers, mais ca se remplis plutot bien
+
+Je pense que la propagation ne se fait pas bien
+
+    while current_tile is not None:
+        if stack == []:
+            break
+        current_tile = stack.pop(0)
+        print(current_tile.x,current_tile.y)
+        current_tile.set_neighbors(current_tile.x, current_tile.y, grid)
+
+        if current_tile.collapse():
+            visual.draw_grid(grid)
+            # Update the neighbors of the collapsed tile
+            updated = False
+            for direction in ['NORTH', 'EAST', 'SOUTH', 'WEST']:
+                if current_tile.update_neighbor_possibilities(direction):
+                    # If the neighbor's possibilities were updated, we need to check if it can be collapsed
+                    neighbor = current_tile.neighbors[direction]
+                    stack.insert(0, neighbor)
+                    if neighbor.entropy == 1:
+                        neighbor.collapse()
+                    updated = True
+            if not updated:
+                # If no neighbors were updated, we can continue collapsing the next tile with minimum entropy
+                minimun_entropy_tile = minimum_entropy_tile(grid)
+                if minimun_entropy_tile != None:
+                    stack.insert(0,minimun_entropy_tile)
+        
+        else:
+            print(f"Tile at position ({current_tile.x}, {current_tile.y}) could not be collapsed.")
+            minimun_entropy_tile = minimum_entropy_tile(grid)
+            if minimun_entropy_tile != None:
+                stack.insert(0,minimun_entropy_tile)
+
+    return grid
+
+TILE_WEIGHTS = {
+    # Define the weights for each tile type
+    'SEA_TILE': 30,
+    'SAND_TILE1': 1,
+    'SAND_TILE2': 1,
+    'SAND_TILE3': 1,
+    'SAND_TILE4': 1,
+    'LAND_TILE': 100,
+    'PATH_TILE1': 10,
+    'PATH_TILE2': 10,
+    'PATH_TILE3': 10,
+    'PATH_TILE4': 10,
+    'PATH_TILE5': 1,
+    'PATH_TILE6': 1,
+    'PATH_TILE7': 1,
+    'PATH_TILE8': 1,
+    'PATH_TILE9': 1,
+    'PATH_TILE10': 1,
+    'PORT_TILE1': 1,
+    'PORT_TILE2': 1,
+    'PORT_TILE3': 1,
+    'PORT_TILE4': 1,
+}
+
+    # Returns True if the tile was successfully collapsed, False if it was already collapsed or if there are no possible tiles left
+    def collapse(self):
+        if self.entropy > 0:
+            if self.possible_tiles == []:
+                print("No possible tiles left to collapse.")
+                return False
+            chosen_tile = random.choice(self.possible_tiles)
+            self.possible_tiles = [chosen_tile]
+            self.entropy = 0
+            return True
+        return False
+
+Avec des poids bien choisit on peut generer: 
+- des marecages: beaucoup de cotes peut de surface d'eau
+- des grandes etendus d'eau: beaucoup d'eau peut de cotes
+- des chemins sinueux: beaucoup de virages et de chemins
