@@ -15,7 +15,7 @@
 
 Il y a des probleme de tuiles qui ne sont pas bien associers, mais ca se remplis plutot bien
 
-Je pense que la propagation ne se fait pas bien
+Je pense que la propagation ne se fait pas bien.
 
     while current_tile is not None:
         if stack == []:

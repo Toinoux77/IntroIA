@@ -1,8 +1,10 @@
 import rubik
 import visual
-import time
+
 
 cube = rubik.rubik()
-for i in range(6):
-    cube.rotR(i)
 visual.display_node(cube.state)
+print(cube.is_solvable())
+cube.shuffle()
+visual.display_node(cube.state)
+print(cube.is_solvable())
