@@ -3,8 +3,9 @@ import visual
 
 
 cube = rubik.rubik()
+print(cube.dist())
 visual.display_node(cube.state)
-print(cube.is_solvable())
-cube.shuffle()
-visual.display_node(cube.state)
-print(cube.is_solvable())
+for i in range(8):    
+    cube.shuffle(i*10)
+    print(cube.dist())
+    visual.display_node(cube.state)

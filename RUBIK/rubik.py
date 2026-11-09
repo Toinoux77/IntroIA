@@ -1,5 +1,5 @@
 import random
-import time
+from math import sqrt
 
 class rubik:
 
@@ -168,10 +168,8 @@ class rubik:
 
         return True
 
-    def shuffle(self):
-        path = []
-        t1 = time.time()
-        for i in range(100):
+    def shuffle(self,n):
+        for i in range(n):
             side = random.randint(0,5)
             dir = random.randint(0,1)
             if dir == 0:
@@ -180,12 +178,18 @@ class rubik:
                     print(i)
                     print("dir=",dir," side=",side)
                     break
-                path.append((dir,side))
             else:
                 self.rotL(side)
                 if not self.is_solvable():
                     print(i)
                     print("dir=",dir," side=",side)
                     break
-                path.append((dir,side))
-        print(time.time()-t1)
+
+    def dist(self):
+        sums = [0,0,0]
+        for i,j,k in [(0,5,0),(1,4,1),(2,3,2)]:
+            for a in range(3):
+                for b in range(3):
+                    sums[k] += self.state[i][a][b] + self.state[j][a][b]
+        dist = sqrt((sums[0]-45)**2 + (sums[1]-45)**2 + (sums[2]-45)**2)
+        return dist

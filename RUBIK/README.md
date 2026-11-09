@@ -1,4 +1,4 @@
-# RUBIK'S CUBE SOLVING WITH A*
+# RUBIK'S CUBE SOLVING WITH IDA*
 
 # FIRST
 ## We need a CUBE (6 sides, 9 tiles) - this is a flattened cube
@@ -54,7 +54,5 @@ It's physically impossible for a cube to change it's angles, centers and edges s
             [0, 2, 2]
 True #This cube is solvable.
 
-# To implement A* we need a HEURISTIC that can be the "entropy" of the cube state or the distance from the solved cube
-## A solvable cube can always be solved in less than 20 moves
-
-Before searching for the best solution with A* we need to know the solution, so we are taking and reducing the random path to get the shortest path
+# To implement IDA* we need a HEURISTIC
+## A solvable cube can always be solved in less than 20 moves however a 3 by 3 cube 
