@@ -1,9 +1,10 @@
 import numpy as np
 import random as rd
 import matplotlib.pyplot as plt
+import time
 
-true_hyperplane = np.array([-1, 1]) # h1*x1 + h2*x2 + b = 0 <==> x2 = (-h1*x1 - b)/h2
-true_biais = 0.5
+true_hyperplane = np.array([1, -1]) # h1*x1 + h2*x2 + b = 0 <==> x2 = (-h1*x1 - b)/h2
+true_biais = 0.1
 
 def is_misclasified(hyperplane, biais, training_set):
     for training_point in training_set:
@@ -16,14 +17,16 @@ def generate_training_set(size):
     for i in range(size):
         x = rd.uniform(-1, 1)
         y = rd.uniform(-1, 1)
-        if true_hyperplane @ np.array([x, y]) + true_biais > 0:
+        e = true_hyperplane @ np.array([x, y]) + true_biais
+        if e > 0:
             label = 1
-        else:
+        elif e != 0:
             label = -1
         training_set.append([np.array([x, y]), label])
     return training_set
 
 def train_perceptron(training_set):
+    t1 = time.time()
     hyperplane = np.array([0, 0])
     biais = 0
     while is_misclasified(hyperplane, biais, training_set):
@@ -32,9 +35,12 @@ def train_perceptron(training_set):
                 hyperplane = np.add(hyperplane, np.multiply(training_point[1], training_point[0]))
                 biais = np.add(biais, training_point[1])
 
+    t2 = time.time()
+    print("Training time:", t2 - t1)
+
     return hyperplane, biais
 
-training_set = generate_training_set(100)
+training_set = generate_training_set(1000)
 hyperplane, biais = train_perceptron(training_set)
 print("Learned hyperplane:", hyperplane)
 print("Learned biais:", biais)
